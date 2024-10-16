@@ -1,4 +1,4 @@
-create database redeSocial;
+create database redesocial;
 
 create table usuario (
 	id_usuario serial primary key,
