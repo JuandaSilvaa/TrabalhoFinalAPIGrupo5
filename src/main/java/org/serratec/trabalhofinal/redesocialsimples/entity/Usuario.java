@@ -5,49 +5,40 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
 	private Long id;
-	
+
 	private String nome;
-	
+
 	private String sobrenome;
-	
+
 	private String email;
-	
+
 	private String senha;
-	
+
 	private LocalDate dataNascimento;
-	
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Set<Usuario> friends = new HashSet<>();
-	
+
 	@ManyToMany
-	@JoinTable(
-			name = "relacionamento",
-			joinColumns = @JoinColumn(name = "seguidor_id"),
-			inverseJoinColumns = @JoinColumn(name = "seguido_id")
-			)
-	
-	 private Set<Usuario> usuario = new HashSet<>();
-	
-	public Usuario() {}
+	@JoinTable(name = "relacionamento", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
+
+	private Set<Usuario> usuario = new HashSet<>();
+
+	public Usuario() {
+	}
 
 	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento,
 			Set<Usuario> usuario) {
@@ -108,14 +99,6 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public Set<Usuario> getFriends() {
-		return friends;
-	}
-
-	public void setFriends(Set<Usuario> friends) {
-		this.friends = friends;
-	}
-
 	public Set<Usuario> getUsuario() {
 		return usuario;
 	}
@@ -140,5 +123,5 @@ public class Usuario {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 }
