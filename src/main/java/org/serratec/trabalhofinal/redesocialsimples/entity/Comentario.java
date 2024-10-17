@@ -2,6 +2,9 @@ package org.serratec.trabalhofinal.redesocialsimples.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +27,7 @@ public class Comentario {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_postagem")
+	@JsonBackReference
 	private Postagem postagem;
 
 	@NotBlank(message = "Preencha com o conteúdo")

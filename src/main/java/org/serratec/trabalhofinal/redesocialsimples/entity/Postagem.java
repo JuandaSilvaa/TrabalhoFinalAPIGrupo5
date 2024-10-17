@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -23,7 +24,7 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_postagem")
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
@@ -33,23 +34,24 @@ public class Postagem {
 	@Column(name = "conteudo", nullable = false, length = 255)
 	private String conteudo;
 
-	@NotBlank(message = "Adicione a data de criação")
+	@NotNull
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDate dataCriacao;
 
 	@OneToMany(mappedBy = "postagem")
-	private List<Comentario> postagem;
+	private List<Comentario> comentario;
 
-	public Postagem(Long id, String conteudo, LocalDate dataCriacao, Usuario usuario, List<Comentario> postagem) {
+	public Postagem(Long id, Usuario usuario, String conteudo, LocalDate dataCriacao, List<Comentario> comentario) {
 		super();
 		this.id = id;
+		this.usuario = usuario;
 		this.conteudo = conteudo;
 		this.dataCriacao = dataCriacao;
-		this.usuario = usuario;
-		this.postagem = postagem;
+		this.comentario = comentario;
 	}
-
+	
 	public Postagem() {
+		
 	}
 
 	public Long getId() {
@@ -58,6 +60,14 @@ public class Postagem {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getConteudo() {
@@ -76,20 +86,12 @@ public class Postagem {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public List<Comentario> getComentario() {
+		return comentario;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public List<Comentario> getPostagem() {
-		return postagem;
-	}
-
-	public void setPostagem(List<Comentario> postagem) {
-		this.postagem = postagem;
+	public void setComentario(List<Comentario> comentario) {
+		this.comentario = comentario;
 	}
 
 }
