@@ -20,7 +20,7 @@ create table postagem (
 create table comentario (
     id_comentario serial primary key,
     id_postagem int not null,
-    texto text not null,
+    comentario text not null,
     data_criacao date not null,
     constraint fk_postagem_comentario foreign key (id_postagem) references postagem (id_postagem)
 );

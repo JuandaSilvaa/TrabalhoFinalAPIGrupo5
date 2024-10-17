@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 @Embeddable
 public class RelacionamentoPK implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     @ManyToOne
     @JoinColumn(name = "seguidor_id")
     private Usuario seguidor;
