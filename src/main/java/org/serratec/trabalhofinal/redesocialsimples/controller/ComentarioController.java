@@ -1,0 +1,72 @@
+package org.serratec.trabalhofinal.redesocialsimples.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.serratec.trabalhofinal.redesocialsimples.entity.Comentario;
+import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
+import org.serratec.trabalhofinal.redesocialsimples.repository.ComentarioRepository;
+import org.serratec.trabalhofinal.redesocialsimples.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/comentarios")
+public class ComentarioController {
+
+	@Autowired
+	ComentarioRepository comentarioRepository;
+	
+	@GetMapping
+	public ResponseEntity<List<Comentario>> listar() {
+		return ResponseEntity.ok(comentarioRepository.findAll());
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Comentario> pesquisar(@PathVariable Long id) {
+		Optional<Comentario> comentarioOpt = comentarioRepository.findById(id);
+		if (comentarioOpt.isPresent()) {
+			Comentario comentario = comentarioOpt.get();
+			return ResponseEntity.ok(comentario);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Comentario inserir(@Valid @RequestBody Comentario comentario) {
+		comentario = comentarioRepository.save(comentario);
+		return comentario;
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Comentario> atualizar(@PathVariable Long id, @Valid @RequestBody Comentario comentario) {
+		if (!comentarioRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		comentario.setId(id);
+		comentario = comentarioRepository.save(comentario);
+		return ResponseEntity.ok(comentario);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remover(@PathVariable Long id) {
+		if(!comentarioRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		comentarioRepository.deleteById(id);
+		return ResponseEntity.noContent().build(); 
+	}
+}

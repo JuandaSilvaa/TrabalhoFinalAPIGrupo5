@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,9 +51,11 @@ public class Usuario {
 	@Column
 	private LocalDate data_nascimento;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "id.seguidor")
 	private Set<Relacionamento> seguidores = new HashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "id.seguido")
 	private Set<Relacionamento> seguindo = new HashSet<>();
 
