@@ -1,5 +1,6 @@
 package org.serratec.trabalhofinal.redesocialsimples.repository;
 
+import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

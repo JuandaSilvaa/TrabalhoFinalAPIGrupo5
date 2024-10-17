@@ -10,11 +10,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "usuario")
 public class Usuario {
 
 	@Id
@@ -22,33 +25,50 @@ public class Usuario {
 	@Column(name = "id_usuario")
 	private Long id;
 
+	@NotBlank(message = "Preencha o nome")
+	@Size(max = 60)
+	@Column(name = "nome", nullable = false, length = 60)
 	private String nome;
 
+	@NotBlank(message = "Preencha com o sobrenome")
+	@Size(max = 100)
+	@Column(name = "sobrenome", nullable = false, length = 100)
 	private String sobrenome;
 
+	@NotBlank(message = "Preencha com o E-mail")
+	@Size(max = 100)
+	@Column(name = "email", unique = true, nullable = false, length = 100)
 	private String email;
 
+	@NotBlank(message = "Preencha com a senha")
+	@Size(max = 100)
+	@Column(name = "senha", nullable = false, length = 100)
 	private String senha;
 
-	private LocalDate dataNascimento;
+	@NotNull
+	@Column
+	private LocalDate data_nascimento;
 
-	@ManyToMany
-	@JoinTable(name = "relacionamento", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
+	@OneToMany(mappedBy = "id.seguidor")
+	private Set<Relacionamento> seguidores = new HashSet<>();
 
-	private Set<Usuario> usuario = new HashSet<>();
+	@OneToMany(mappedBy = "id.seguido")
+	private Set<Relacionamento> seguindo = new HashSet<>();
 
 	public Usuario() {
 	}
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento,
-			Set<Usuario> usuario) {
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate data_nascimento,
+			Set<Relacionamento> seguidores, Set<Relacionamento> seguindo) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.email = email;
 		this.senha = senha;
-		this.dataNascimento = dataNascimento;
+		this.data_nascimento = data_nascimento;
+		this.seguidores = seguidores;
+		this.seguindo = seguindo;
 	}
 
 	public Long getId() {
@@ -91,20 +111,28 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public LocalDate getDataNascimento() {
-		return dataNascimento;
+	public LocalDate getData_nascimento() {
+		return data_nascimento;
 	}
 
-	public void setDataNascimento(LocalDate dataNascimento) {
-		this.dataNascimento = dataNascimento;
+	public void setData_nascimento(LocalDate data_nascimento) {
+		this.data_nascimento = data_nascimento;
 	}
 
-	public Set<Usuario> getUsuario() {
-		return usuario;
+	public Set<Relacionamento> getSeguidores() {
+		return seguidores;
 	}
 
-	public void setUsuario(Set<Usuario> usuario) {
-		this.usuario = usuario;
+	public void setSeguidores(Set<Relacionamento> seguidores) {
+		this.seguidores = seguidores;
+	}
+
+	public Set<Relacionamento> getSeguindo() {
+		return seguindo;
+	}
+
+	public void setSeguindo(Set<Relacionamento> seguindo) {
+		this.seguindo = seguindo;
 	}
 
 	@Override
