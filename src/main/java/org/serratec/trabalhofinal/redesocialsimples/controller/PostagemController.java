@@ -3,6 +3,7 @@ package org.serratec.trabalhofinal.redesocialsimples.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.trabalhofinal.redesocialsimples.dto.PostagemDTO;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Postagem;
 import org.serratec.trabalhofinal.redesocialsimples.repository.PostagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,11 @@ public class PostagemController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> pesquisar(@PathVariable Long id) {
+	public ResponseEntity<PostagemDTO> pesquisar(@PathVariable Long id) {
 		Optional<Postagem> postagemOpt = postagemRepository.findById(id);
 		if (postagemOpt.isPresent()) {
-			Postagem postagem = postagemOpt.get();
-			return ResponseEntity.ok(postagem);
+			PostagemDTO postagemDTO = new PostagemDTO(postagemOpt.get());
+			return ResponseEntity.ok(postagemDTO);
 		}
 		return ResponseEntity.notFound().build();
 	}
