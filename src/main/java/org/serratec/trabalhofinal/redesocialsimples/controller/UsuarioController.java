@@ -74,9 +74,9 @@ public class UsuarioController {
 				.toUri();
 		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
-	/*
+	
 	@PutMapping("/{id}")
-	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) {
+	public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
 		if (!usuarioRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
@@ -84,7 +84,6 @@ public class UsuarioController {
 		usuario = usuarioRepository.save(usuario);
 		return ResponseEntity.ok(usuario);
 	}
-	*/
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
 		if(!usuarioRepository.existsById(id)) {
