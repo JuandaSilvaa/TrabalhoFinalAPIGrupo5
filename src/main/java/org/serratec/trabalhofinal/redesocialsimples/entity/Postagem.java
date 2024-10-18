@@ -49,9 +49,9 @@ public class Postagem {
 		this.dataCriacao = dataCriacao;
 		this.comentario = comentario;
 	}
-	
+
 	public Postagem() {
-		
+
 	}
 
 	public Long getId() {
