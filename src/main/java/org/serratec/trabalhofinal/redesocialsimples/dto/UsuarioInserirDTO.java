@@ -7,7 +7,7 @@ public class UsuarioInserirDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
-	private LocalDate data_nascimento;
+	private LocalDate dataNascimento;
 	private String senha;
 	
 
@@ -35,12 +35,12 @@ public class UsuarioInserirDTO {
 		this.email = email;
 	}
 
-	public LocalDate getData_nascimento() {
-		return data_nascimento;
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setData_nascimento(LocalDate data_nascimento) {
-		this.data_nascimento = data_nascimento;
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getSenha() {

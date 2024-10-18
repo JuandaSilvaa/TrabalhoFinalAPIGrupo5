@@ -1,9 +1,15 @@
 package org.serratec.trabalhofinal.redesocialsimples.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,7 +26,9 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements UserDetails, Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +57,7 @@ public class Usuario {
 
 	@NotNull
 	@Column
-	private LocalDate data_nascimento;
+	private LocalDate dataNascimento;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "id.seguidor")
@@ -62,7 +70,7 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate data_nascimento,
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento,
 			Set<Relacionamento> seguidores, Set<Relacionamento> seguindo) {
 		super();
 		this.id = id;
@@ -70,7 +78,7 @@ public class Usuario {
 		this.sobrenome = sobrenome;
 		this.email = email;
 		this.senha = senha;
-		this.data_nascimento = data_nascimento;
+		this.dataNascimento = dataNascimento;
 		this.seguidores = seguidores;
 		this.seguindo = seguindo;
 	}
@@ -115,12 +123,12 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public LocalDate getData_nascimento() {
-		return data_nascimento;
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setData_nascimento(LocalDate data_nascimento) {
-		this.data_nascimento = data_nascimento;
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public Set<Relacionamento> getSeguidores() {
@@ -154,6 +162,20 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+	    return Collections.emptyList();
+	}
+
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 
 }

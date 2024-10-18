@@ -1,9 +1,7 @@
 package org.serratec.trabalhofinal.redesocialsimples.dto;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-import org.serratec.trabalhofinal.redesocialsimples.entity.Relacionamento;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 
 public class UsuarioDTO {
@@ -11,33 +9,25 @@ public class UsuarioDTO {
 	private Long id;
 	private String nome;
 	private String sobrenome;
-	private LocalDate data_nascimento;
+	private LocalDate dataNascimento;
 	private String email;
-	private Set<Relacionamento> seguidores;
-	private Set<Relacionamento> seguindo;
-
 	public UsuarioDTO() {
 	}
 
-	public UsuarioDTO(Long id, String nome, String sobrenome, LocalDate data_nascimento, String email,
-			Set<Relacionamento> seguidores, Set<Relacionamento> seguindo) {
+	public UsuarioDTO(Long id, String nome, String sobrenome, LocalDate dataNascimento, String email) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
-		this.data_nascimento = data_nascimento;
+		this.dataNascimento = dataNascimento;
 		this.email = email;
-		this.seguidores = seguidores;
-		this.seguindo = seguindo;
 	}
 
 	public UsuarioDTO(Usuario usuario) {
 		this.id = usuario.getId();
 		this.nome = usuario.getNome();
 		this.sobrenome = usuario.getSobrenome();
-		this.data_nascimento = usuario.getData_nascimento();
+		this.dataNascimento = usuario.getDataNascimento();
 		this.email = usuario.getEmail();
-		this.seguidores = usuario.getSeguidores();
-		this.seguindo = usuario.getSeguindo();
 	}
 
 	public Long getId() {
@@ -64,28 +54,12 @@ public class UsuarioDTO {
 		this.sobrenome = sobrenome;
 	}
 
-	public LocalDate getData_nascimento() {
-		return data_nascimento;
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setData_nascimento(LocalDate data_nascimento) {
-		this.data_nascimento = data_nascimento;
-	}
-
-	public Set<Relacionamento> getSeguidores() {
-		return seguidores;
-	}
-
-	public void setSeguidores(Set<Relacionamento> seguidores) {
-		this.seguidores = seguidores;
-	}
-
-	public Set<Relacionamento> getSeguindo() {
-		return seguindo;
-	}
-
-	public void setSeguindo(Set<Relacionamento> seguindo) {
-		this.seguindo = seguindo;
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getEmail() {
