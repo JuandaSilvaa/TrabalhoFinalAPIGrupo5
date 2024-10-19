@@ -1,25 +1,24 @@
 package org.serratec.trabalhofinal.redesocialsimples.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import org.serratec.trabalhofinal.redesocialsimples.entity.Comentario;
 
 public class PostagemInserirDTO {
 
-	private String usuario;
+	private Long usuarioId; 
 	private String conteudo;
 	private LocalDate datacriacao;
 	private Set<Comentario> comentarios;
+	
+	public Long getUsuarioId() {
+        return usuarioId;
+    }
 
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
 	public String getConteudo() {
 		return conteudo;
