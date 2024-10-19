@@ -60,6 +60,9 @@ public class UsuarioService {
 		return usuarioDTO;
 	}
 	
+  	public void deletar(Long id) {
+		usuarioRepository.deleteById(id);
+	}
 	
 	
 }
