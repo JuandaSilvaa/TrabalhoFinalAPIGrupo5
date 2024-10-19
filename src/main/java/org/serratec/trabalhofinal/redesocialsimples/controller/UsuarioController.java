@@ -58,9 +58,9 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/paginas")
-	public ResponseEntity<Page<Usuario>> listarPaginado(
+	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 8) Pageable pageable) {
-		Page<Usuario> usuario = usuarioRepository.findAll(pageable);
+		Page<UsuarioDTO> usuario = usuarioService.paginacao(pageable);
 		return ResponseEntity.ok(usuario);
 	}
 	
