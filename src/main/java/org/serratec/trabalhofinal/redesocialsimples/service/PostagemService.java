@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class PostagemService {
 
@@ -35,17 +37,24 @@ public class PostagemService {
 
 	@Transactional
 	public PostagemDTO adicionar(PostagemInserirDTO postagemInserirDTO) {
-	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(postagemInserirDTO.getUsuarioId());
-	    Usuario usuario = usuarioOpt.get();
-	    Postagem postagem = new Postagem();
-	    postagem.setUsuario(usuario);
-	    postagem.setConteudo(postagemInserirDTO.getConteudo());
-	    postagem.setDataCriacao(postagemInserirDTO.getDatacriacao());
+	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(postagemInserirDTO.getUsuario().getId());
+	    
+	    if (usuarioOpt.isPresent()) {
+	        Usuario usuario = usuarioOpt.get();  
 
-	    postagem = postagemRepository.save(postagem);
+	        Postagem postagem = new Postagem();
+	        postagem.setUsuario(usuario); 
+	        postagem.setConteudo(postagemInserirDTO.getConteudo());
+	        postagem.setDataCriacao(postagemInserirDTO.getDatacriacao());
 
-	    return new PostagemDTO(postagem);
+	        postagem = postagemRepository.save(postagem);
+
+	        return new PostagemDTO(postagem);
+	    } else {
+	        throw new EntityNotFoundException("Usuário não encontrado");
+	    }
 	}
+
 
 	public void deletar(Long id) {
 		postagemRepository.deleteById(id);

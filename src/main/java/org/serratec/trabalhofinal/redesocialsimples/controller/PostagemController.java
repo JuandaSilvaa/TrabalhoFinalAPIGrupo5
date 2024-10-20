@@ -34,8 +34,8 @@ public class PostagemController {
 	PostagemService postagemService;
 
 	@GetMapping
-	public ResponseEntity<List<Postagem>> listar() {
-		return ResponseEntity.ok(postagemRepository.findAll());
+	public ResponseEntity<List<PostagemDTO>> listar() {
+		return ResponseEntity.ok(postagemService.findall());
 	}
 
 	@GetMapping("/{id}")
