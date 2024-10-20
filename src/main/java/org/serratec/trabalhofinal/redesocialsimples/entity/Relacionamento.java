@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,13 +15,6 @@ public class Relacionamento {
 	@EmbeddedId
 	private RelacionamentoPK id = new RelacionamentoPK();
 	
-	@ManyToOne
-	@JoinColumn(name = "seguidor_id", insertable = false, updatable = false)
-	private Usuario seguidor;
-	
-	@ManyToOne
-	@JoinColumn(name = "seguido_id", insertable = false, updatable = false)
-	private Usuario seguido;
 	
 	@NotNull
 	@Column(name = "data_inicio_seguimento", nullable = false)
@@ -31,12 +22,10 @@ public class Relacionamento {
 
 	public Relacionamento() {
 	}
-
-	public Relacionamento(RelacionamentoPK id, Usuario seguidor, Usuario seguido, LocalDate dataInicioSeguimento) {
+	
+	public Relacionamento(RelacionamentoPK id, LocalDate dataInicioSeguimento) {
 		super();
 		this.id = id;
-		this.seguidor = seguidor;
-		this.seguido = seguido;
 		this.dataInicioSeguimento = dataInicioSeguimento;
 	}
 
@@ -46,22 +35,6 @@ public class Relacionamento {
 
 	public void setId(RelacionamentoPK id) {
 		this.id = id;
-	}
-
-	public Usuario getSeguidor() {
-		return seguidor;
-	}
-
-	public void setSeguidor(Usuario seguidor) {
-		this.seguidor = seguidor;
-	}
-
-	public Usuario getSeguido() {
-		return seguido;
-	}
-
-	public void setSeguido(Usuario seguido) {
-		this.seguido = seguido;
 	}
 
 	public LocalDate getDataInicioSeguimento() {
