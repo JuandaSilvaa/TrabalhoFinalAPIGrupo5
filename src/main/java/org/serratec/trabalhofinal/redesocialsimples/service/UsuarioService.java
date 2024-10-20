@@ -60,9 +60,29 @@ public class UsuarioService {
 		return usuarioDTO;
 	}
 	
+	@Transactional
+	public UsuarioDTO atualizarUsuario(Long id, UsuarioInserirDTO usuarioInserirDTO) {
+
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setNome(usuarioInserirDTO.getNome());
+        usuario.setEmail(usuarioInserirDTO.getEmail());
+        usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+
+        Usuario usuarioAtualizado = usuarioRepository.save(usuario);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuarioAtualizado.getId());
+        usuarioDTO.setNome(usuarioAtualizado.getNome());
+        usuarioDTO.setEmail(usuarioAtualizado.getEmail());
+
+        return usuarioDTO;
+    }
+	
   	public void deletar(Long id) {
 		usuarioRepository.deleteById(id);
 	}
-	
 	
 }

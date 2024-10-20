@@ -76,14 +76,12 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
-		if (!usuarioRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		usuario.setId(id);
-		usuario = usuarioRepository.save(usuario);
-		return ResponseEntity.ok(usuario);
+	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+	    UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioInserirDTO);
+
+	    return ResponseEntity.ok(usuarioAtualizado);
 	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
 		if(!usuarioRepository.existsById(id)) {
