@@ -8,57 +8,67 @@ import org.serratec.trabalhofinal.redesocialsimples.entity.Postagem;
 
 public class PostagemDTO {
 
-	private Long id;
-	private String conteudo;
-	private LocalDate dataCriacao;
-	private List<Comentario> comentarios;
+    private Long id;
+    private UsuarioDTO usuario;
+    private String conteudo;
+    private LocalDate dataCriacao;
+    private List<Comentario> comentarios;
+      
+    public PostagemDTO() {
+    }
 
-	public PostagemDTO() {
-	}
+    public PostagemDTO(Long id, String conteudo, LocalDate dataCriacao, UsuarioDTO usuario) {
+        this.id = id;
+        this.conteudo = conteudo;
+        this.dataCriacao = dataCriacao;
+        this.usuario = usuario;
+    }
 
-	public PostagemDTO(Long id, String conteudo, LocalDate dataCriacao) {
-		this.id = id;
-		this.conteudo = conteudo;
-		this.dataCriacao = dataCriacao;
-	}
+    public PostagemDTO(Postagem postagem) {
+        this.id = postagem.getId();
+        this.conteudo = postagem.getConteudo();
+        this.dataCriacao = postagem.getDataCriacao();
+        this.comentarios = postagem.getComentario();
+        this.usuario = new UsuarioDTO(postagem.getUsuario());
+    }
 
-	public PostagemDTO(Postagem postagem) {
-		this.id = postagem.getId();
-		this.conteudo = postagem.getConteudo();
-		this.dataCriacao = postagem.getDataCriacao();
-		this.comentarios = postagem.getComentario();
-		}
+    public Long getId() {
+        return id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getConteudo() {
+        return conteudo;
+    }
 
-	public String getConteudo() {
-		return conteudo;
-	}
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
 
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
 
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
-	}
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
 
-	public List<Comentario> getComentarios() {
-		return comentarios;
-	}
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
-	public void setComentarios(List<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
-	
+    public UsuarioDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
 }

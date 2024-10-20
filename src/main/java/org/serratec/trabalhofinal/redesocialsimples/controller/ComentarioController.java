@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.serratec.trabalhofinal.redesocialsimples.entity.Comentario;
-import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 import org.serratec.trabalhofinal.redesocialsimples.repository.ComentarioRepository;
-import org.serratec.trabalhofinal.redesocialsimples.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
