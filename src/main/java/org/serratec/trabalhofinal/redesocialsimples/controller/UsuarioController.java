@@ -27,6 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -37,6 +42,16 @@ public class UsuarioController {
 	UsuarioService usuarioService;
 
 	@GetMapping
+	@Operation(summary = "Lista todos os usuarios", description = "Mostra a Lista de usuarios com nome, sobrenome, data de nascimento e email")
+		@ApiResponses(value = {
+				@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Usuario.class),mediaType = "application/json")},
+						description = "Retorna todos os Usuarios"),
+				@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+				@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+				@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+				@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+		})
 	public ResponseEntity<List<UsuarioDTO>> listar() {
 		UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println("Login do usuario: " + details.getUsername());
@@ -44,6 +59,15 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Lista um usuario usando seu id", description = "Mostra a Lista de usuarios com nome, sobrenome, data de nascimento e email")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna um usuario"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
 		Optional<Usuario> usuarioOpt = usuarioService.buscar(id);
 		if (usuarioOpt.isPresent()) {
@@ -54,6 +78,15 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/paginas")
+	@Operation(summary = "Lista os usuarios por páginas", description = "Mostra uma lista paginada de um usuario com nome, o sobrenome, a data de nascimento e o email")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna todos os usuarios por páginas"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
 	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
 			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 8) Pageable pageable) {
 		Page<UsuarioDTO> usuario = usuarioService.paginacao(pageable);
@@ -61,6 +94,16 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/{id}/postagens")
+	@Operation(summary = "Lista as postagens de um usuario usando seu id", description = "Mostra a Lista de postagens de usuarios com nome, sobrenome, data de nascimento, email, conteudo e data da postagem")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna todas as postagens de um usuario"),
+			@ApiResponse(responseCode = "400", description = "Erro de entrada"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
     public ResponseEntity<List<UsuarioPostagemDTO>> getPostagensPorUsuario(@PathVariable("id") Long userId) {
         List<UsuarioPostagemDTO> postagens = usuarioService.buscarPostagensPorUsuario(userId);
         if (postagens.isEmpty()) {
@@ -70,6 +113,15 @@ public class UsuarioController {
     }
 
 	@PostMapping
+	@Operation(summary = "Insere um usuario no sistema", description = "Adiciona um usuario no sistema")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
 	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioDTO.getId())
@@ -78,6 +130,16 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Atualiza um usuario do sistema", description = "Atualiza um usuario do sistema")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro de entrada"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
 	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id,
 			@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 		UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioInserirDTO);
@@ -86,6 +148,15 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Deleta um usuario do sistema", description = "Deleta um usuario do sistema")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Usuario deletado com sucesso"),
+			@ApiResponse(responseCode = "401", description = "Erro de autenticação"),
+			@ApiResponse(responseCode = "403", description = "Não há permissão para acessar o recurso"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+	})
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
 		Optional<Usuario> usuario = usuarioService.buscar(id);
 
