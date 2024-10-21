@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioDTO;
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioInserirDTO;
+import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioPostagemDTO;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 import org.serratec.trabalhofinal.redesocialsimples.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,15 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuario);
 	}
 
+	@GetMapping("/{id}/postagens")
+    public ResponseEntity<List<UsuarioPostagemDTO>> getPostagensPorUsuario(@PathVariable("id") Long userId) {
+        List<UsuarioPostagemDTO> postagens = usuarioService.buscarPostagensPorUsuario(userId);
+        if (postagens.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(postagens);
+    }
+
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
@@ -82,7 +92,7 @@ public class UsuarioController {
 		if (usuario.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		usuarioService.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
