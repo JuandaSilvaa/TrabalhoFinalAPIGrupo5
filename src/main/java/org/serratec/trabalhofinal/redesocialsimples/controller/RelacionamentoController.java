@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -56,23 +55,19 @@ public class RelacionamentoController {
 		return relacionamento;
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Relacionamento> atualizar(@PathVariable RelacionamentoPK id,
-			@Valid @RequestBody Relacionamento relacionamento) {
-		if (!relacionamentoRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		relacionamento.setId(id);
-		relacionamento = relacionamentoRepository.save(relacionamento);
-		return ResponseEntity.ok(relacionamento);
+	@DeleteMapping("/{seguidorId}/{seguidoId}")
+	public ResponseEntity<Void> remover(@PathVariable Usuario seguidorId, @PathVariable Usuario seguidoId) {
+
+	    RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
+	    relacionamentoPK.setSeguidor(seguidorId);
+	    relacionamentoPK.setSeguido(seguidoId);
+
+	    if (!relacionamentoRepository.existsById(relacionamentoPK)) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    relacionamentoRepository.deleteById(relacionamentoPK);
+	    return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable RelacionamentoPK id) {
-		if (!relacionamentoRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		relacionamentoRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
 }

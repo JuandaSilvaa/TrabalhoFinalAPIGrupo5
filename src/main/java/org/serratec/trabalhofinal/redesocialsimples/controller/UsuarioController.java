@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioDTO;
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioInserirDTO;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
-import org.serratec.trabalhofinal.redesocialsimples.repository.UsuarioRepository;
 import org.serratec.trabalhofinal.redesocialsimples.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,21 +31,17 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
 
 	@Autowired
 	UsuarioService usuarioService;
-	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
-	
+
 	@GetMapping
-	public ResponseEntity<List<UsuarioDTO>> listar() { 
+	public ResponseEntity<List<UsuarioDTO>> listar() {
 		UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println("Login do usuario: " + details.getUsername());
 		return ResponseEntity.ok(usuarioService.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id) {
 		Optional<Usuario> usuarioOpt = usuarioService.buscar(id);
@@ -56,38 +51,40 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping("/paginas")
 	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
-            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 8) Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 8) Pageable pageable) {
 		Page<UsuarioDTO> usuario = usuarioService.paginacao(pageable);
 		return ResponseEntity.ok(usuario);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(usuarioDTO.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioDTO.getId())
 				.toUri();
 		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
-	    UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioInserirDTO);
 
-	    return ResponseEntity.ok(usuarioAtualizado);
+	@PutMapping("/{id}")
+	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id,
+			@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+		UsuarioDTO usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioInserirDTO);
+
+		return ResponseEntity.ok(usuarioAtualizado);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		if(!usuarioRepository.existsById(id)) {
+		Optional<Usuario> usuario = usuarioService.buscar(id);
+
+		if (usuario.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		usuarioRepository.deleteById(id);
-		return ResponseEntity.noContent().build(); 
+		
+		usuarioService.deletar(id);
+		return ResponseEntity.noContent().build();
 	}
+
 }
