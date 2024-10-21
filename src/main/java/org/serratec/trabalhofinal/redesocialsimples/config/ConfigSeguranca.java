@@ -39,6 +39,7 @@ public class ConfigSeguranca {
 		.authorizeHttpRequests(authorize -> 
 	        authorize
 	            .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+	            .requestMatchers(HttpMethod.PATCH, "/swagger-ui/**").permitAll()
 	            .anyRequest().authenticated()
 	    )
 	    .httpBasic(Customizer.withDefaults())
