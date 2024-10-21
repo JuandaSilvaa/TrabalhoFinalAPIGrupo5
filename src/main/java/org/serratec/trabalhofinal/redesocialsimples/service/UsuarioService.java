@@ -67,6 +67,7 @@ public class UsuarioService {
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         usuario.setNome(usuarioInserirDTO.getNome());
+        usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
         usuario.setEmail(usuarioInserirDTO.getEmail());
         usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
         usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
@@ -76,7 +77,9 @@ public class UsuarioService {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setId(usuarioAtualizado.getId());
         usuarioDTO.setNome(usuarioAtualizado.getNome());
+        usuarioDTO.setSobrenome(usuarioAtualizado.getSobrenome());
         usuarioDTO.setEmail(usuarioAtualizado.getEmail());
+        usuarioDTO.setDataNascimento(usuarioAtualizado.getDataNascimento());
 
         return usuarioDTO;
     }

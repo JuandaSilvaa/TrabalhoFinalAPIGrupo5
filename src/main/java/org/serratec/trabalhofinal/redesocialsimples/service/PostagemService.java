@@ -10,6 +10,9 @@ import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 import org.serratec.trabalhofinal.redesocialsimples.repository.PostagemRepository;
 import org.serratec.trabalhofinal.redesocialsimples.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +33,14 @@ public class PostagemService {
 		return postagensDTO;
 	}
 
-	public PostagemDTO buscarPorId(Long id) {
-		Optional<Postagem> postagem = postagemRepository.findById(id);
-		return postagem.map(PostagemDTO::new).orElse(null);
+	public Optional<PostagemDTO> buscarPorId(Long id) {
+	    return postagemRepository.findById(id).map(PostagemDTO::new);
+	}
+	
+	public Page<PostagemDTO> paginacao(Pageable pageable) {
+		Page<Postagem> postagens = postagemRepository.findAll(pageable);
+		List<PostagemDTO> postagemDTO = postagens.stream().map(PostagemDTO::new).toList();
+		return new PageImpl<>(postagemDTO, pageable, postagens.getTotalElements());
 	}
 
 	@Transactional
@@ -53,6 +61,19 @@ public class PostagemService {
 	    } else {
 	        throw new EntityNotFoundException("Usuário não encontrado");
 	    }
+	}
+	
+	@Transactional
+	public PostagemDTO atualizarPostagem(Long id, PostagemInserirDTO postagemInserirDTO) {
+	    Postagem postagem = postagemRepository.findById(id)
+	        .orElseThrow(() -> new RuntimeException("Postagem não encontrada"));
+
+	    postagem.setConteudo(postagemInserirDTO.getConteudo());
+	    postagem.setDataCriacao(postagemInserirDTO.getDatacriacao());
+
+	    Postagem postagemAtualizada = postagemRepository.save(postagem);
+
+	    return new PostagemDTO(postagemAtualizada);
 	}
 
 

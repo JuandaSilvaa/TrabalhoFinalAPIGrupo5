@@ -6,10 +6,12 @@ import java.util.Optional;
 
 import org.serratec.trabalhofinal.redesocialsimples.dto.PostagemDTO;
 import org.serratec.trabalhofinal.redesocialsimples.dto.PostagemInserirDTO;
-import org.serratec.trabalhofinal.redesocialsimples.entity.Postagem;
-import org.serratec.trabalhofinal.redesocialsimples.repository.PostagemRepository;
 import org.serratec.trabalhofinal.redesocialsimples.service.PostagemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +30,6 @@ import jakarta.validation.Valid;
 public class PostagemController {
 
 	@Autowired
-	PostagemRepository postagemRepository;
-
-	@Autowired
 	PostagemService postagemService;
 
 	@GetMapping
@@ -38,15 +37,17 @@ public class PostagemController {
 		return ResponseEntity.ok(postagemService.findall());
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<PostagemDTO> pesquisar(@PathVariable Long id) {
-		Optional<Postagem> postagemOpt = postagemRepository.findById(id);
-		if (postagemOpt.isPresent()) {
-			PostagemDTO postagemDTO = new PostagemDTO(postagemOpt.get());
-			return ResponseEntity.ok(postagemDTO);
-		}
-		return ResponseEntity.notFound().build();
+	@GetMapping("/{id}") 
+	public ResponseEntity<PostagemDTO> buscar(@PathVariable Long id) {
+	    Optional<PostagemDTO> postagemOpt = postagemService.buscarPorId(id);
+
+	    if (postagemOpt.isPresent()) {
+	        return ResponseEntity.ok(postagemOpt.get());
+	    }
+
+	    return ResponseEntity.notFound().build();
 	}
+
 
 	@PostMapping
 	public ResponseEntity<PostagemDTO> inserir(@RequestBody PostagemInserirDTO postagemInserirDTO) {
@@ -60,21 +61,32 @@ public class PostagemController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Postagem> atualizar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
-		if (!postagemRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		postagem.setId(id);
-		postagem = postagemRepository.save(postagem);
-		return ResponseEntity.ok(postagem);
+	public ResponseEntity<PostagemDTO> atualizar(@PathVariable Long id,
+			@Valid @RequestBody PostagemInserirDTO postagemInserirDTO) {
+		PostagemDTO postagemAtualizado = postagemService.atualizarPostagem(id, postagemInserirDTO);
+
+		return ResponseEntity.ok(postagemAtualizado);
+	}
+	
+	@GetMapping("/paginas")
+	public ResponseEntity<Page<PostagemDTO>> listarPaginado(
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 8) Pageable pageable) {
+		Page<PostagemDTO> usuario = postagemService.paginacao(pageable);
+		return ResponseEntity.ok(usuario);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		if (!postagemRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		postagemRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
+	    Optional<PostagemDTO> postagemOpt = postagemService.buscarPorId(id);
+
+	    if (postagemOpt.isEmpty()) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    postagemService.deletar(id);
+	    return ResponseEntity.noContent().build();
 	}
+
+
+
 }
