@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioDTO;
 import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioInserirDTO;
+import org.serratec.trabalhofinal.redesocialsimples.dto.UsuarioPostagemDTO;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Usuario;
 import org.serratec.trabalhofinal.redesocialsimples.exception.EmailException;
 import org.serratec.trabalhofinal.redesocialsimples.repository.UsuarioRepository;
@@ -40,6 +41,10 @@ public class UsuarioService {
 	public Optional<Usuario> buscar(Long id) {
 		return usuarioRepository.findById(id);
 	}
+	
+	public List<UsuarioPostagemDTO> buscarPostagensPorUsuario(Long userId) {
+        return usuarioRepository.buscarUsuarioComPostagens(userId);
+    }
 	
 	@Transactional
 	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) throws EmailException {
