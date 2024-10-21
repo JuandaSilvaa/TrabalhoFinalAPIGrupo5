@@ -10,8 +10,13 @@ import org.serratec.trabalhofinal.redesocialsimples.entity.Postagem;
 import org.serratec.trabalhofinal.redesocialsimples.repository.ComentarioRepository;
 import org.serratec.trabalhofinal.redesocialsimples.repository.PostagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ComentarioService {
@@ -22,34 +27,53 @@ public class ComentarioService {
     @Autowired
     private PostagemRepository postagemRepository;
 
-    public List<ComentarioDTO> findAll() {
-        List<Comentario> comentarios = comentarioRepository.findAll();
-        return comentarios.stream().map(ComentarioDTO::new).toList();
-    }
+	public List<ComentarioDTO> findall() {
+		List<Comentario> comentarios = comentarioRepository.findAll();
+		List<ComentarioDTO> comentarioDTO = comentarios.stream().map(ComentarioDTO::new).toList();
+		return comentarioDTO;
+	}
  
-    public ComentarioDTO buscarPorId(Long id) {
-        Optional<Comentario> comentario = comentarioRepository.findById(id);
-        return comentario.map(ComentarioDTO::new).orElse(null);
-    }
+	public Optional<ComentarioDTO> buscarPorId(Long id) {
+	    return comentarioRepository.findById(id).map(ComentarioDTO::new);
+	}
+	
+	public Page<ComentarioDTO> paginacao(Pageable pageable) {
+		Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
+		List<ComentarioDTO> comentarioDTO = comentarios.stream().map(ComentarioDTO::new).toList();
+		return new PageImpl<>(comentarioDTO, pageable, comentarios.getTotalElements());
+	}
+	
+	@Transactional
+	public ComentarioDTO adicionar(ComentarioInserirDTO comentarioInserirDTO) {
+	    Long postagemId = comentarioInserirDTO.getPostagemId();
+	    Optional<Postagem> postagem = postagemRepository.findById(postagemId);
+	    if (postagem.isEmpty()) {
+	        throw new EntityNotFoundException("Postagem não encontrada de ID: " + postagemId);
+	    }
+	    
+	    Comentario comentario = new Comentario();
+	    comentario.setConteudo(comentarioInserirDTO.getConteudo());
+	    comentario.setDateCriacao(comentarioInserirDTO.getDataCriacao());
+	    comentario.setPostagem(postagem.get());
 
-    @Transactional
-    public ComentarioDTO adicionar(ComentarioInserirDTO comentarioInserirDTO) {
-        Optional<Postagem> postagem = postagemRepository.findById(comentarioInserirDTO.getPostagemId());
-        if (postagem.isEmpty()) {
-        	
-        }
-        
-        Comentario comentario = new Comentario();
-        comentario.setConteudo(comentarioInserirDTO.getConteudo());
-        comentario.setDateCriacao(comentarioInserirDTO.getDataCriacao());
-        comentario.setPostagem(postagem.get());
-        comentario = comentarioRepository.save(comentario);
-		return null;
-    }
+	    comentario = comentarioRepository.save(comentario);
+	    return new ComentarioDTO(comentario);
+	}
+	
+	@Transactional
+	public ComentarioDTO atualizarComentario(Long id, ComentarioInserirDTO comentarioInserirDTO) {
+	    Comentario comentario = comentarioRepository.findById(id)
+	        .orElseThrow(() -> new RuntimeException("Comentário não encontrado"));
 
-    public void deletar(Long id) {
-        if (comentarioRepository.existsById(id)) {
-            comentarioRepository.deleteById(id);
-        }
-    }
+	    comentario.setConteudo(comentarioInserirDTO.getConteudo());
+	    comentario.setDateCriacao(comentarioInserirDTO.getDataCriacao());
+
+	    Comentario comentarioAtualizado = comentarioRepository.save(comentario);
+
+	    return new ComentarioDTO(comentarioAtualizado);
+	}
+
+	public void deletar(Long id) {
+		comentarioRepository.deleteById(id);
+	}
 }
