@@ -12,7 +12,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
 
-@Configuration // Anotação que indica que esta classe é uma configuração do Spring
+@Configuration 
 
 public class OpenApiConfig {
 
@@ -22,7 +22,7 @@ public class OpenApiConfig {
 	@Value("${dominio.openapi.prod-url}")
 	private String prodUrl;
 	
-	@Bean //trata o objeto em configuraçoes
+	@Bean 
 	OpenAPI myOpenAPI() {
 		Server devServer = new Server();
 		devServer.setUrl(devUrl);
@@ -40,8 +40,8 @@ public class OpenApiConfig {
 		License apacheLicense = new License().name("Apache License")
 				.url("https://www.apache.org/license/LICENSE-2.0");
 		
-		Info info = new Info().title("API de Testes").version("1.0").contact(contact)
-				.description("API para testes no H2").termsOfService("https://www.meudominio.com.br/termos")
+		Info info = new Info().title("API de Rede Social Simples").version("1.0").contact(contact)
+				.description("API para testes no DBeaver").termsOfService("https://www.meudominio.com.br/termos")
 				.license(apacheLicense);
 		
 		return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
