@@ -9,8 +9,10 @@ public class UsuarioDTO {
 	private Long id;
 	private String nome;
 	private String sobrenome;
+	private String url;
 	private LocalDate dataNascimento;
 	private String email;
+
 	public UsuarioDTO() {
 	}
 
@@ -68,6 +70,14 @@ public class UsuarioDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

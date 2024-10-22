@@ -1,10 +1,13 @@
 package org.serratec.trabalhofinal.redesocialsimples.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,17 +41,16 @@ public class Postagem {
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDate dataCriacao;
 
-	@OneToMany(mappedBy = "postagem")
+	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Comentario> comentario;
 
-	public Postagem(Long id, Usuario usuario, String conteudo, LocalDate dataCriacao, List<Comentario> comentario) {
-		super();
-		this.id = id;
-		this.usuario = usuario;
-		this.conteudo = conteudo;
-		this.dataCriacao = dataCriacao;
-		this.comentario = comentario;
-	}
+    public Postagem(Long id, Usuario usuario, String conteudo, LocalDate dataCriacao, List<Comentario> comentario) {
+        this.id = id;
+        this.usuario = usuario;
+        this.conteudo = conteudo;
+        this.dataCriacao = dataCriacao;
+        this.comentario = comentario != null ? comentario : new ArrayList<>(); 
+    }
 
 	public Postagem() {
 

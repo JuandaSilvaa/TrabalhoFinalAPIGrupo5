@@ -23,11 +23,15 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_comentario")
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_postagem")
 	@JsonBackReference
 	private Postagem postagem;
+
+	@ManyToOne
+	@JoinColumn(name = "id_usuario", nullable = false)
+	private Usuario usuario;
 
 	@NotBlank(message = "Preencha com o conteúdo")
 	@Column(name = "comentario", nullable = false)
@@ -78,6 +82,14 @@ public class Comentario {
 
 	public void setPostagem(Postagem postagem) {
 		this.postagem = postagem;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

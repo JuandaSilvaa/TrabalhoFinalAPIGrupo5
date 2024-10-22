@@ -2,33 +2,53 @@ package org.serratec.trabalhofinal.redesocialsimples.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ComentarioInserirDTO {
 
-    private String conteudo;
-    private LocalDate dataCriacao;
-    private Long postagemId;
+	@NotBlank(message = "Preencha com o conteúdo")
+	private String conteudo;
 
-    public String getConteudo() {
-        return conteudo;
-    }
+	@NotNull
+	private LocalDate dataCriacao;
 
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
+	private Long postagemId;
 
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
 
-    public Long getPostagemId() {
-        return postagemId;
-    }
+	private Long usuarioId;
 
-    public void setPostagemId(Long postagemId) {
-        this.postagemId = postagemId;
-    }
+	public String getConteudo() {
+		return conteudo;
+	}
+
+	public void setConteudo(String conteudo) {
+		this.conteudo = conteudo;
+	}
+
+	public LocalDate getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(LocalDate dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+
+	public Long getPostagemId() {
+		return postagemId;
+	}
+
+	public void setPostagemId(Long postagemId) {
+		this.postagemId = postagemId;
+	}
+
+	public Long getUsuarioId() {
+		return usuarioId;
+	}
+
+	public void setUsuarioId(Long usuarioId) {
+		this.usuarioId = usuarioId;
+	}
+
 }

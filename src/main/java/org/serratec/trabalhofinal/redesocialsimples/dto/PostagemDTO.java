@@ -1,9 +1,9 @@
 package org.serratec.trabalhofinal.redesocialsimples.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.serratec.trabalhofinal.redesocialsimples.entity.Comentario;
 import org.serratec.trabalhofinal.redesocialsimples.entity.Postagem;
 
 public class PostagemDTO {
@@ -12,24 +12,29 @@ public class PostagemDTO {
     private UsuarioDTO usuario;
     private String conteudo;
     private LocalDate dataCriacao;
-    private List<Comentario> comentarios;
+    private List<ComentarioDTO> comentarios;
       
     public PostagemDTO() {
     }
 
-    public PostagemDTO(Long id, String conteudo, LocalDate dataCriacao, UsuarioDTO usuario) {
+    public PostagemDTO(Long id, String conteudo, LocalDate dataCriacao, UsuarioDTO usuario, List<ComentarioDTO> comentarios) {
         this.id = id;
         this.conteudo = conteudo;
         this.dataCriacao = dataCriacao;
         this.usuario = usuario;
+        this.comentarios = comentarios != null ? comentarios : new ArrayList<>(); 
     }
 
     public PostagemDTO(Postagem postagem) {
         this.id = postagem.getId();
         this.conteudo = postagem.getConteudo();
         this.dataCriacao = postagem.getDataCriacao();
-        this.comentarios = postagem.getComentario();
         this.usuario = new UsuarioDTO(postagem.getUsuario());
+
+        this.comentarios = postagem.getComentario() != null ? 
+            postagem.getComentario().stream()
+            .map(ComentarioDTO::new)
+            .toList() : new ArrayList<>();
     }
 
     public Long getId() {
@@ -56,11 +61,11 @@ public class PostagemDTO {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<Comentario> getComentarios() {
+    public List<ComentarioDTO> getComentarios() {
         return comentarios;
     }
 
-    public void setComentarios(List<Comentario> comentarios) {
+    public void setComentarios(List<ComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
 

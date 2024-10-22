@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -99,14 +101,14 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
 	})
-	public ResponseEntity<ComentarioDTO> inserir(@RequestBody ComentarioInserirDTO comentarioInserirDTO) {
-		ComentarioDTO comentarioDTO = comentarioService.adicionar(comentarioInserirDTO);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(comentarioDTO.getId())
-				.toUri();
-		return ResponseEntity.created(uri).body(comentarioDTO);
+	public ResponseEntity<ComentarioDTO> inserir(@RequestBody ComentarioInserirDTO comentarioInserirDTO) throws AccessDeniedException, EntityNotFoundException {
+	        ComentarioDTO comentarioDTO = comentarioService.adicionar(comentarioInserirDTO);
+	        URI uri = ServletUriComponentsBuilder
+	                .fromCurrentRequest()
+	                .path("/{id}")
+	                .buildAndExpand(comentarioDTO.getId())
+	                .toUri();
+	        return ResponseEntity.created(uri).body(comentarioDTO);
 	}
 	
 	@PutMapping("/{id}")
@@ -121,7 +123,7 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
 	})
 	public ResponseEntity<ComentarioDTO> atualizar(@PathVariable Long id,
-			@Valid @RequestBody ComentarioInserirDTO comentarioInserirDTO) {
+			@Valid @RequestBody ComentarioInserirDTO comentarioInserirDTO) throws RuntimeException {
 		ComentarioDTO comentarioAtualizado = comentarioService.atualizarComentario(id, comentarioInserirDTO);
 
 		return ResponseEntity.ok(comentarioAtualizado);

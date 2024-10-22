@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -84,7 +85,7 @@ public class PostagemController {
 			@ApiResponse(responseCode = "500", description = "Exceção interna do servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
 	})
-	public ResponseEntity<PostagemDTO> inserir(@RequestBody PostagemInserirDTO postagemInserirDTO) {
+	public ResponseEntity<PostagemDTO> inserir(@RequestBody PostagemInserirDTO postagemInserirDTO) throws EntityNotFoundException{
 		PostagemDTO postagemDTO = postagemService.adicionar(postagemInserirDTO);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -106,7 +107,7 @@ public class PostagemController {
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
 	})
 	public ResponseEntity<PostagemDTO> atualizar(@PathVariable Long id,
-			@Valid @RequestBody PostagemInserirDTO postagemInserirDTO) {
+			@Valid @RequestBody PostagemInserirDTO postagemInserirDTO) throws RuntimeException {
 		PostagemDTO postagemAtualizado = postagemService.atualizarPostagem(id, postagemInserirDTO);
 
 		return ResponseEntity.ok(postagemAtualizado);
