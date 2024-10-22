@@ -3,14 +3,21 @@ package org.serratec.trabalhofinal.redesocialsimples.dto;
 import java.time.LocalDate;
 import java.util.Set;
 
-import org.serratec.trabalhofinal.redesocialsimples.entity.Comentario;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class PostagemInserirDTO {
 
     private UsuarioDTO usuario; 
+    
+	@NotBlank(message = "Adicione um conteúdo")
     private String conteudo;
+	
+	@NotNull
     private LocalDate datacriacao;
-    private Set<Comentario> comentarios;
+	
+	
+	 private Set<ComentarioDTO> comentarios;
 
     public UsuarioDTO getUsuario() {
         return usuario;
@@ -36,11 +43,11 @@ public class PostagemInserirDTO {
         this.datacriacao = datacriacao;
     }
 
-    public Set<Comentario> getComentarios() {
+    public Set<ComentarioDTO> getComentarios() {
         return comentarios;
     }
 
-    public void setComentarios(Set<Comentario> comentarios) {
+    public void setComentarios(Set<ComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
 }

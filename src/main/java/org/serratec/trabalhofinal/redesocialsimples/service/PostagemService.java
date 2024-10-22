@@ -44,7 +44,7 @@ public class PostagemService {
 	}
 
 	@Transactional
-	public PostagemDTO adicionar(PostagemInserirDTO postagemInserirDTO) {
+	public PostagemDTO adicionar(PostagemInserirDTO postagemInserirDTO) throws EntityNotFoundException{
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(postagemInserirDTO.getUsuario().getId());
 	    
 	    if (usuarioOpt.isPresent()) {
@@ -64,7 +64,7 @@ public class PostagemService {
 	}
 	
 	@Transactional
-	public PostagemDTO atualizarPostagem(Long id, PostagemInserirDTO postagemInserirDTO) {
+	public PostagemDTO atualizarPostagem(Long id, PostagemInserirDTO postagemInserirDTO) throws RuntimeException {
 	    Postagem postagem = postagemRepository.findById(id)
 	        .orElseThrow(() -> new RuntimeException("Postagem não encontrada"));
 

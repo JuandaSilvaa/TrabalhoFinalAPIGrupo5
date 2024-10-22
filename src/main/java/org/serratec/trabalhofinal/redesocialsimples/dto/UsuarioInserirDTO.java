@@ -2,12 +2,24 @@ package org.serratec.trabalhofinal.redesocialsimples.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UsuarioInserirDTO {
 
+	@NotBlank(message = "Preencha o nome")
 	private String nome;
+	
+	@NotBlank(message = "Preencha com o sobrenome")
 	private String sobrenome;
+	
+	@NotBlank(message = "Preencha com o E-mail")
 	private String email;
+	
+	@NotNull
 	private LocalDate dataNascimento;
+	
+	@NotBlank(message = "Preencha com a senha")
 	private String senha;
 	
 

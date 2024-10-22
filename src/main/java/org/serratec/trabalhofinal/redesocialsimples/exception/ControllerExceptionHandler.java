@@ -1,5 +1,6 @@
 package org.serratec.trabalhofinal.redesocialsimples.exception;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +8,15 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -36,4 +40,25 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handleEmailException(EmailException ex) {
 		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
 	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	private ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	private ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	private ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(IOException.class)
+	private ResponseEntity<Object> handleIOException(IOException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
+	
 }
